@@ -33,7 +33,7 @@ install_mali() {
             ;;
     esac
 
-    apt install -f /packages/libmali/libmali-*$MALI*-x11*.deb
+    dpkg -i /packages/libmali/libmali-*$MALI*-x11*.deb
 }
 
 function update_npu_fw() {

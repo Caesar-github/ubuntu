@@ -31,15 +31,6 @@ sudo cp -rf packages/$ARCH/* $TARGET_ROOTFS_DIR/packages
 # overlay folder
 sudo cp -rf overlay/* $TARGET_ROOTFS_DIR/
 
-# bt/wifi firmware
-if [ "$ARCH" == "armhf" ]; then
-    sudo cp overlay-firmware/usr/bin/brcm_patchram_plus1_32 $TARGET_ROOTFS_DIR/usr/bin/brcm_patchram_plus1
-    sudo cp overlay-firmware/usr/bin/rk_wifi_init_32 $TARGET_ROOTFS_DIR/usr/bin/rk_wifi_init
-elif [ "$ARCH" == "arm64" ]; then
-    sudo cp overlay-firmware/usr/bin/brcm_patchram_plus1_64 $TARGET_ROOTFS_DIR/usr/bin/brcm_patchram_plus1
-    sudo cp overlay-firmware/usr/bin/rk_wifi_init_64 $TARGET_ROOTFS_DIR/usr/bin/rk_wifi_init
-fi
-
 # version
 echo -e "\033[36m Add version string to rootfs \033[0m"
 echo "`date +%Y%m%d.%H%M%S`" > /tmp/firmware-release-version
