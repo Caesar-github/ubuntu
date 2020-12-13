@@ -14,12 +14,12 @@ TARGET_ROOTFS_DIR="binary"
 if [ ! -d $TARGET_ROOTFS_DIR ] ; then
     sudo mkdir -p $TARGET_ROOTFS_DIR
 
-    if [ ! -e ubuntu-base-20.04-base-$ARCH.tar.gz ]; then
+    if [ ! -e ubuntu-base-20.04.1-base-$ARCH.tar.gz ]; then
         echo "\033[36m wget ubuntu-base-20.04-base-x.tar.gz \033[0m"
-        wget -c http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04-base-$ARCH.tar.gz
+        wget -c http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-$ARCH.tar.gz
     fi
-    sudo chmod 0666 ubuntu-base-20.04-base-$ARCH.tar.gz
-    sudo tar -xzvf ubuntu-base-20.04-base-$ARCH.tar.gz -C $TARGET_ROOTFS_DIR/
+    sudo chmod 0666 ubuntu-base-20.04.1-base-$ARCH.tar.gz
+    sudo tar -xzvf ubuntu-base-20.04.1-base-$ARCH.tar.gz -C $TARGET_ROOTFS_DIR/
     sudo cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
     if [ "$ARCH" == "armhf" ]; then
 	    sudo cp /usr/bin/qemu-arm-static $TARGET_ROOTFS_DIR/usr/bin/
