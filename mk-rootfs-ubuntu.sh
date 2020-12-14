@@ -78,9 +78,9 @@ apt-get update
 
 chmod +x /etc/rc.local
 
-apt-get install -y git fakeroot devscripts cmake vim qemu-user-static binfmt-support dh-make dh-exec pkg-kde-tools device-tree-compiler bc cpio parted dosfstools mtools libssl-dev g++-arm-linux-gnueabihf
+#apt-get install -y git fakeroot devscripts cmake vim qemu-user-static binfmt-support dh-make dh-exec pkg-kde-tools device-tree-compiler bc cpio parted dosfstools mtools libssl-dev g++-arm-linux-gnueabihf
 
-apt-get install -y isc-dhcp-client-ddns
+apt-get install -y libssl-dev hostapd ifupdown iperf iproute2 iptables iputils-ping isc-dhcp-client iw net-tools netbase netcat-openbsd network-manager-gnome openssh-client openssh-server
 
 #---------------Rga--------------
 dpkg -i /packages/rga/*.deb
