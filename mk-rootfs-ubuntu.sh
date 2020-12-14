@@ -122,8 +122,9 @@ dpkg -i  /packages/mpv/*.deb
 apt-get install -f -y
 
 #---------update chromium-----
-apt-get install -y chromium-x11
+apt-get install -y chromium-browser
 apt-get install -f -y /packages/chromium/*.deb
+apt-get install -f -y
 
 #------------------libdrm------------
 dpkg -i  /packages/libdrm/*.deb
