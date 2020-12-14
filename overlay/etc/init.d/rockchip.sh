@@ -102,7 +102,7 @@ then
 fi
 
 # support power management
-if [ -e "/usr/sbin/pm-suspend" ] ;
+if [ -e "/usr/sbin/pm-suspend" -a -e /etc/Powermanager ] ;
 then
     mv /etc/Powermanager/power-key.sh /usr/bin/
     mv /etc/Powermanager/power-key.conf /etc/triggerhappy/triggers.d/
@@ -116,6 +116,14 @@ then
     rm /etc/Powermanager -rf
     service triggerhappy restart
 fi
+
+# Create dummy video node for chromium V4L2 VDA/VEA with rkmpp plugin
+echo dec > /dev/video-dec0
+echo enc > /dev/video-enc0
+
+# The chromium using fixed pathes for libv4l2.so
+ln -rsf /usr/lib/*/libv4l2.so /usr/lib/
+[ -e /usr/lib/aarch64-linux-gnu/ ] && ln -Tsf lib /usr/lib64
 
 # read mac-address from efuse
 # if [ "$BOARDNAME" == "rk3288-miniarm" ]; then

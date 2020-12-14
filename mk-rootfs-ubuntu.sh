@@ -121,6 +121,10 @@ apt-get install -y mpv
 dpkg -i  /packages/mpv/*.deb
 apt-get install -f -y
 
+#---------update chromium-----
+apt-get install -y chromium-x11
+apt-get install -f -y /packages/chromium/*.deb
+
 #------------------libdrm------------
 dpkg -i  /packages/libdrm/*.deb
 apt-get install -f -y
