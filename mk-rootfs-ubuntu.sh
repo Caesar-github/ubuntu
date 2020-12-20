@@ -91,6 +91,7 @@ apt-get install -f -y
 
 dpkg -i  /packages/mpp/*
 dpkg -i  /packages/gst-rkmpp/*.deb
+dpkg -i  /packages/gst-base/*.deb
 #apt-mark hold gstreamer1.0-x
 apt-get install -f -y
 
