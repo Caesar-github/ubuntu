@@ -1,1 +1,0 @@
-KERNEL=="ttyUSB*", ENV{ID_VENDOR}=="Quectel", ENV{ID_USB_INTERFACE_NUM}=="02", SYMLINK+="atdev", TAG+="systemd", ENV{SYSTEMD_WANTS}="ubuntu-lte.service"
