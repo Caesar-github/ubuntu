@@ -96,13 +96,10 @@ dpkg -i  /packages/gst-base/*.deb
 apt-get install -f -y
 
 #---------Camera---------
-apt-get install cheese v4l-utils -y
-dpkg -i  /packages/others/camera/*.deb
-if [ "$ARCH" == "armhf" ]; then
-       cp /packages/others/camera/libv4l-mplane.so /usr/lib/arm-linux-gnueabihf/libv4l/plugins/
-elif [ "$ARCH" == "arm64" ]; then
-       cp /packages/others/camera/libv4l-mplane.so /usr/lib/aarch64-linux-gnu/libv4l/plugins/
-fi
+echo -e "\033[36m Install camera.................... \033[0m"
+apt-get install v4l-utils -y
+dpkg -i  /packages/rkisp/*.deb
+dpkg -i  /packages/libv4l/*.deb
 
 #---------Xserver---------
 #apt-get build-dep -y xorg-server-source
