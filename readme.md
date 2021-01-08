@@ -16,7 +16,7 @@ sudo apt-get install -f
 ## Usage for 32bit ubuntu 20.04
 
 ```
-ARCH=armhf ./mk-base-ubuntu.sh
+ARCH=armhf RELEASE=focal ./mk-base-ubuntu.sh
 VERSION=debug ARCH=armhf ./mk-rootfs-ubuntu.sh
 ./mk-image.sh
 ```
@@ -24,7 +24,7 @@ VERSION=debug ARCH=armhf ./mk-rootfs-ubuntu.sh
 ## Usage for 64bit ubuntu 20.04
 
 ```
-ARCH=arm64 ./mk-base-ubuntu.sh
+ARCH=arm64 RELEASE=focal ./mk-base-ubuntu.sh
 VERSION=debug ARCH=arm64 ./mk-rootfs-ubuntu.sh
 ./mk-image.sh
 ```

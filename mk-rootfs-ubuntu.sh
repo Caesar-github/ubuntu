@@ -80,7 +80,7 @@ chmod +x /etc/rc.local
 
 #apt-get install -y git fakeroot devscripts cmake vim qemu-user-static binfmt-support dh-make dh-exec pkg-kde-tools device-tree-compiler bc cpio parted dosfstools mtools libssl-dev g++-arm-linux-gnueabihf
 
-apt-get install -y libssl-dev hostapd ifupdown iperf iproute2 iptables iputils-ping isc-dhcp-client iw net-tools netbase netcat-openbsd network-manager-gnome openssh-client openssh-server
+apt-get install -y libssl-dev hostapd ifupdown iperf isc-dhcp-client iw net-tools netbase netcat-openbsd openssh-client openssh-server
 
 #---------------Rga--------------
 dpkg -i /packages/rga/*.deb
@@ -89,44 +89,38 @@ echo -e "\033[36m Setup Video.................... \033[0m"
 apt-get install -y gstreamer1.0-plugins-bad gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-alsa gstreamer1.0-plugins-base-apps qtmultimedia5-examples
 apt-get install -f -y
 
-dpkg -i  /packages/mpp/*
-dpkg -i  /packages/gst-rkmpp/*.deb
-dpkg -i  /packages/gst-base/*.deb
+apt install -f -y /packages/mpp/*
+apt install -f -y /packages/gst-rkmpp/*.deb
+apt install -f -y /packages/gst-base/*.deb
 #apt-mark hold gstreamer1.0-x
-apt-get install -f -y
 
 #---------Camera---------
 echo -e "\033[36m Install camera.................... \033[0m"
 apt-get install v4l-utils -y
-dpkg -i  /packages/rkisp/*.deb
-dpkg -i  /packages/libv4l/*.deb
+apt install -f -y /packages/rkisp/*.deb
+apt install -f -y /packages/libv4l/*.deb
 
 #---------Xserver---------
 #apt-get build-dep -y xorg-server-source
 apt-get install -y libgl1-mesa-dev libgles-dev libgles1 libegl1-mesa-dev libc-dev-bin libc6-dev libcrypt-dev libfontenc-dev libfreetype-dev libfreetype6-dev libpciaccess-dev libpng-dev libpng-tools libxfont-dev libxkbfile-dev linux-libc-dev manpages manpages-dev xserver-common zlib1g-dev
 
-dpkg -i /packages/xserver/*.deb
-apt-get install -f -y
+apt install -f -y /packages/xserver/*.deb
 apt-mark hold xserver-common xserver-xorg-core xserver-xorg-legacy
 
 #------------------ffmpeg------------
-apt-get install -y ffmpeg
-dpkg -i  /packages/ffmpeg/*.deb
-apt-get install -f -y
+apt-get install -f -y ffmpeg
+apt install -f -y /packages/ffmpeg/*.deb
 
 #------------------mpv------------
 apt-get install -y mpv
-dpkg -i  /packages/mpv/*.deb
-apt-get install -f -y
+apt install -f -y /packages/mpv/*.deb
 
 #---------update chromium-----
 apt-get install -y chromium-browser
-apt-get install -f -y /packages/chromium/*.deb
-apt-get install -f -y
+apt install -f -y /packages/chromium/*.deb
 
 #------------------libdrm------------
-dpkg -i  /packages/libdrm/*.deb
-apt-get install -f -y
+apt install -f -y /packages/libdrm/*.deb
 
 # mark package to hold
 # apt-mark hold libv4l-0 libv4l2rds0 libv4lconvert0 libv4l-dev v4l-utils

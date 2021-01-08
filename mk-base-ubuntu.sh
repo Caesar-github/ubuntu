@@ -11,6 +11,10 @@ fi
 VERSION="debug"
 TARGET_ROOTFS_DIR="binary"
 
+if [ -e lubuntu-$RELEASE-base-*.tar.gz ]; then
+	rm lubuntu-$RELEASE-base-*.tar.gz
+fi
+
 if [ ! -d $TARGET_ROOTFS_DIR ] ; then
     sudo mkdir -p $TARGET_ROOTFS_DIR
 
@@ -46,10 +50,16 @@ cat <<EOF | sudo chroot $TARGET_ROOTFS_DIR/
 apt-get -y update
 apt-get -f -y upgrade
 
+# install useful tools anf lubuntu
 apt-get -f -y install apt-utils inetutils-ping vim git net-tools ubuntu-advantage-tools glmark2-es2
 apt-get install -f -y lubuntu-default-settings lubuntu-desktop ssh ufw
 
-HOST=ubuntu-box
+# remove gnome by default
+apt-get -y -f remove --purge gnome-*
+apt-get -y -f remove --purge gnome
+apt-get -y -f autoremove
+
+HOST=ubuntu
 
 # Create User
 useradd -G sudo -m -s /bin/bash ubuntu
@@ -64,13 +74,12 @@ root
 root
 IEOF
 
-update-alternatives --config x-session-manager
-dpkg-reconfigure lightdm
 sync
 
 EOF
 
 ./ch-mount.sh -u $TARGET_ROOTFS_DIR
 
-echo -e "normal exit"
+sudo tar zcvf lubuntu-$RELEASE-base-$ARCH.tar.gz $TARGET_ROOTFS_DIR
 
+echo -e "normal exit"
