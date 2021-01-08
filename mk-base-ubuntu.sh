@@ -1,13 +1,5 @@
 #!/bin/bash -e
 
-if [ "$RELEASE" == "focal" ]; then
-	RELEASE='focal'
-elif [ "$RELEASE" == "buster" ]; then
-	RELEASE='buster'
-else
-    echo -e "\033[36m please input the os type,stretch or buster...... \033[0m"
-fi
-
 if [ "$ARCH" == "armhf" ]; then
 	ARCH='armhf'
 elif [ "$ARCH" == "arm64" ]; then
@@ -16,35 +8,69 @@ else
     echo -e "\033[36m please input the os type,armhf or arm64...... \033[0m"
 fi
 
-if [ ! $TARGET ]; then
-	TARGET='gnome'
+VERSION="debug"
+TARGET_ROOTFS_DIR="binary"
+
+if [ ! -d $TARGET_ROOTFS_DIR ] ; then
+    sudo mkdir -p $TARGET_ROOTFS_DIR
+
+    if [ ! -e ubuntu-base-20.04.1-base-$ARCH.tar.gz ]; then
+        echo "\033[36m wget ubuntu-base-20.04-base-x.tar.gz \033[0m"
+        wget -c http://cdimage.ubuntu.com/ubuntu-base/releases/20.04/release/ubuntu-base-20.04.1-base-$ARCH.tar.gz
+    fi
+    sudo chmod 0666 ubuntu-base-20.04.1-base-$ARCH.tar.gz
+    sudo tar -xzvf ubuntu-base-20.04.1-base-$ARCH.tar.gz -C $TARGET_ROOTFS_DIR/
+    sudo cp -b /etc/resolv.conf $TARGET_ROOTFS_DIR/etc/resolv.conf
+    if [ "$ARCH" == "armhf" ]; then
+	    sudo cp /usr/bin/qemu-arm-static $TARGET_ROOTFS_DIR/usr/bin/
+    elif [ "$ARCH" == "arm64"  ]; then
+	    sudo cp /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
+    fi
+    sudo cp -b sources.list $TARGET_ROOTFS_DIR/etc/apt/sources.list
+
 fi
 
+finish() {
+    ./ch-mount.sh -u $TARGET_ROOTFS_DIR
+    echo -e "error exit"
+    exit -1
+}
+trap finish ERR
 
-if [ -e linaro-$RELEASE-alip-*.tar.gz ]; then
-	rm linaro-$RELEASE-alip-*.tar.gz
-elif [ -e ubuntu-$RELEASE-gnome-*.tar.gz ]; then
-	rm ubuntu-$RELEASE-gnome-*.tar.gz
-else
-    echo -e "\033[36m please check the input os type...... \033[0m"
-fi
+echo "\033[36m Change root.....................\033[0m"
 
-cd ubuntu-build-service/$RELEASE-$TARGET-$ARCH
+./ch-mount.sh -m $TARGET_ROOTFS_DIR
 
-echo -e "\033[36m Staring Download...... \033[0m"
+cat <<EOF | sudo chroot $TARGET_ROOTFS_DIR/
 
-make clean
+apt-get -y update
+apt-get -f -y upgrade
 
-./configure
+apt-get -f -y install apt-utils inetutils-ping vim git net-tools ubuntu-advantage-tools glmark2-es2
+apt-get install -f -y lubuntu-default-settings lubuntu-desktop ssh ufw
 
-make
+HOST=ubuntu-box
 
-if [ -e linaro-$RELEASE-alip-*.tar.gz ]; then
-	sudo chmod 0666 linaro-$RELEASE-alip-*.tar.gz
-	mv linaro-$RELEASE-alip-*.tar.gz ../../
-elif [ -e ubuntu-$RELEASE-gnome-*.tar.gz ]; then
-	sudo chmod 0666 ubuntu-$RELEASE-gnome-*.tar.gz
-	mv ubuntu-$RELEASE-gnome-*.tar.gz ../../
-else
-	echo -e "\e[31m Failed to run livebuild, please check your network connection. \e[0m"
-fi
+# Create User
+useradd -G sudo -m -s /bin/bash ubuntu
+passwd ubuntu <<IEOF
+ubuntu
+ubuntu
+IEOF
+gpasswd -a ubuntu video
+gpasswd -a ubuntu audio
+passwd root <<IEOF
+root
+root
+IEOF
+
+update-alternatives --config x-session-manager
+dpkg-reconfigure lightdm
+sync
+
+EOF
+
+./ch-mount.sh -u $TARGET_ROOTFS_DIR
+
+echo -e "normal exit"
+

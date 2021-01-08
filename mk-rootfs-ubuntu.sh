@@ -3,10 +3,6 @@
 # Directory contains the target rootfs
 TARGET_ROOTFS_DIR="binary"
 
-#if [ -e $TARGET_ROOTFS_DIR ]; then
-#	sudo rm -rf $TARGET_ROOTFS_DIR
-#fi
-
 if [ "$ARCH" == "armhf" ]; then
 	ARCH='armhf'
 elif [ "$ARCH" == "arm64" ]; then
@@ -19,21 +15,12 @@ if [ ! $VERSION ]; then
     VERSION="debug"
 fi
 
-
-if [ ! -e ubuntu-focal-gnome-*.tar.gz ]; then
-	echo "\033[36m Run mk-base-debian.sh first \033[0m"
-fi
-
 finish() {
     ./ch-mount.sh -u $TARGET_ROOTFS_DIR
     echo "error exit"
     exit -1
 }
 trap finish ERR
-
-
-echo -e "\033[36m Extract image \033[0m"
-sudo tar -xpf ubuntu-focal-gnome-*.tar.gz
 
 echo -e "\033[36m Copy overlay to rootfs \033[0m"
 
@@ -81,11 +68,7 @@ if [ "$ARCH" == "armhf" ]; then
 	sudo cp /usr/bin/qemu-arm-static $TARGET_ROOTFS_DIR/usr/bin/
 elif [ "$ARCH" == "arm64"  ]; then
 	sudo cp /usr/bin/qemu-aarch64-static $TARGET_ROOTFS_DIR/usr/bin/
-fi	
-
-##HACK recovelf
-#echo "nameserver 127.0.0.53" | tee /etc/resolv.conf > /dev/null
-sudo cp /etc/resolv.conf $TARGET_ROOTFS_DIR/run/systemd/resolve/resolv.conf
+fi
 
 ./ch-mount.sh -m $TARGET_ROOTFS_DIR
 
@@ -93,7 +76,6 @@ cat <<EOF | sudo chroot $TARGET_ROOTFS_DIR
 
 apt-get update
 
-chmod o+x /usr/lib/dbus-1.0/dbus-daemon-launch-helper
 chmod +x /etc/rc.local
 
 #apt-get install -y git fakeroot devscripts cmake vim qemu-user-static binfmt-support dh-make dh-exec pkg-kde-tools device-tree-compiler bc cpio parted dosfstools mtools libssl-dev g++-arm-linux-gnueabihf

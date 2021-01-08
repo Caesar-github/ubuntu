@@ -1,7 +1,0 @@
-#!/bin/sh  
-
-echo "I: create ubuntu user"
-adduser --gecos ubuntu --disabled-login ubuntu
-
-echo "I: set ubuntu user password"
-echo "ubuntu:ubuntu" | chpasswd

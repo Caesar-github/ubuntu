@@ -1,2 +1,0 @@
-deb http://ppa.linuxfactory.or.kr @DISTRIBUTION@ main non-free
-deb-src http://ppa.linuxfactory.or.kr @DISTRIBUTION@ main non-free
